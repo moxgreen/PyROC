@@ -349,9 +349,6 @@ class ROCData(object):
 
 		
 if __name__ == '__main__':
-	print "PyRoC - ROC Curve Generator"
-	print "By Marcel Pinheiro Caraciolo (@marcelcaraciolo)"
-	print "http://aimotion.bogspot.com\n"
 	from optparse import OptionParser
 	
 	parser = OptionParser()
@@ -359,10 +356,15 @@ if __name__ == '__main__':
 	parser.add_option("-n", "--max fp", dest = "fp_n", default=0, help= "Maximum false positives to calculate up to (for partial AUC).")
 	parser.add_option("-p","--plot", action="store_true",dest='plotFlag', default=False, help="Plot the ROC curve (matplotlib required)")
 	parser.add_option("-t",'--title', dest= 'ptitle' , default='' , help = 'Title of plot.')
+	parser.add_option("-q",'--quiet', dest= 'quiet', action='store_true', default=False , help = 'Do not print informative text')
 	
 	(options,args) = parser.parse_args()
 
-
+	if not options.quiet:
+		print "PyRoC - ROC Curve Generator"
+		print "By Marcel Pinheiro Caraciolo (@marcelcaraciolo)"
+		print "http://aimotion.bogspot.com\n"
+	
 	if (not options.origFile):
 		parser.print_help()
 		exit()
@@ -370,10 +372,9 @@ if __name__ == '__main__':
 	df_data = load_decision_function(options.origFile)
 	roc = ROCData(df_data)
 	roc_n = int(options.fp_n)
-	print "ROC AUC: %s" % (str(roc.auc(roc_n)),)
-	print 'Standard Error:  %s' % (str(roc.calculateStandardError(roc_n)),) 
+	print "#ROC AUC:\t%s" % (str(roc.auc(roc_n)),)
+	print '#Standard Error:\t%s' % (str(roc.calculateStandardError(roc_n)),) 
 	
-	print ''
 	for pt in roc.derived_points:
 		print pt[0],pt[1]
 		
